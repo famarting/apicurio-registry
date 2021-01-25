@@ -1,0 +1,52 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "Apicurio Registry Integration Events",
+        "version": "1.0.0"
+    },
+    "components": {
+        "schemas": {
+            "ArtifactId": {
+                "title": "Root Type for ArtifactId",
+                "description": "",
+                "required": [
+                    "artifactId"
+                ],
+                "type": "object",
+                "properties": {
+                    "artifactId": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "artifactId": "abcde"
+                }
+            },
+            "ArtifactStateChange": {
+                "title": "Root Type for ArtifactStateChange",
+                "description": "",
+                "required": [
+                    "artifactId",
+                    "state"
+                ],
+                "type": "object",
+                "properties": {
+                    "artifactId": {
+                        "type": "string"
+                    },
+                    "state": {
+                        "type": "string"
+                    },
+                    "version": {
+                        "type": "integer"
+                    }
+                },
+                "example": {
+                    "artifactId": "abcde",
+                    "state": "ENABLED",
+                    "version": 3
+                }
+            }
+        }
+    }
+}
