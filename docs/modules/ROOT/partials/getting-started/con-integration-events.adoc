@@ -1,0 +1,17 @@
+
+[id="registry-integrations"]
+= {registry} Integration Events
+
+{registry} can be configured to produce events when specific actions happen in the registry, this allows for custom or third party integrations with {registry}.
+
+You can configure {registry} to send events to your applications when artifacts are created, updated, deleted,...
+
+//Only artifact metadata will be send in the event payload, applications will have to query the registry after receiving an event to obtain the artifact content.
+
+The are different protocols available for the transport of the events, the current implemented protocols are: http and kafka. Regardless of the protocol events are send using the CloudEvents specification.
+
+The event types are:
+
+* io.apicurio.registry.artifact-created
+* io.apicurio.registry.artifact-updated
+//TODO artifact-deleted
