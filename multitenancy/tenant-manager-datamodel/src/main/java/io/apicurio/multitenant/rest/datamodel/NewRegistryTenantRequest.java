@@ -23,13 +23,11 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public class NewRegistryTenantRequest {
 
     /**
-     * Root Type for TenantId
-     * <p>
-     * The unique ID of a tenant managed by this API, bound to only one registry deployment.
+     * Unique identifier of a tenant within a registry deployment
      * 
      */
     @JsonProperty("tenantId")
-    @JsonPropertyDescription("The unique ID of a tenant managed by this API, bound to only one registry deployment.")
+    @JsonPropertyDescription("Unique identifier of a tenant within a registry deployment")
     private String tenantId;
     /**
      * ID of the organization the tenant belongs to
@@ -56,9 +54,7 @@ public class NewRegistryTenantRequest {
     private String clientId;
 
     /**
-     * Root Type for TenantId
-     * <p>
-     * The unique ID of a tenant managed by this API, bound to only one registry deployment.
+     * Unique identifier of a tenant within a registry deployment
      * 
      */
     @JsonProperty("tenantId")
@@ -67,9 +63,7 @@ public class NewRegistryTenantRequest {
     }
 
     /**
-     * Root Type for TenantId
-     * <p>
-     * The unique ID of a tenant managed by this API, bound to only one registry deployment.
+     * Unique identifier of a tenant within a registry deployment
      * 
      */
     @JsonProperty("tenantId")
