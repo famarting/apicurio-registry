@@ -14,7 +14,7 @@ import javax.ws.rs.Produces;
 /**
  * A JAX-RS interface.  An implementation of this interface must be provided.
  */
-@Path("/schemagroups")
+@Path("/cncf/schemagroups")
 public interface SchemagroupsResource {
   /**
    * Get all schema groups in namespace.
