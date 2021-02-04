@@ -350,7 +350,8 @@
                     "required": true
                 }
             ]
-        }
+        },
+        "x-codegen-contextRoot": "/cncf/v0.1"
     },
     "components": {
         "schemas": {
@@ -363,6 +364,7 @@
                 }
             },
             "SchemaBytePayload": {
+                "format": "binary",
                 "type": "string"
             },
             "SchemaGroup": {
@@ -389,7 +391,9 @@
                         "type": "object",
                         "additionalProperties": {
                             "type": "string"
-                        }
+                        },
+                        "x-codegen-inline": true,
+                        "x-codegen-type": "StringMap"
                     }
                 }
             }
