@@ -44,6 +44,9 @@ public class RegistryTenantDto {
     @Column(name = "authServerUrl")
     private String authServerUrl;
 
+    @Column(name = "authRealm")
+    private String authRealm;
+
     @Column(name = "authClientId")
     private String authClientId;
 
@@ -92,6 +95,20 @@ public class RegistryTenantDto {
         this.authServerUrl = authServerUrl;
     }
 
+    /**
+     * @return the authRealm
+     */
+    public String getAuthRealm() {
+        return authRealm;
+    }
+
+    /**
+     * @param authRealm the authRealm to set
+     */
+    public void setAuthRealm(String authRealm) {
+        this.authRealm = authRealm;
+    }
+
     public String getAuthClientId() {
         return authClientId;
     }
@@ -107,6 +124,7 @@ public class RegistryTenantDto {
         t.setCreatedBy(this.createdBy);
         t.setOrganizationId(this.organizationId);
         t.setAuthClientId(this.authClientId);
+        t.setAuthRealm(this.authRealm);
         t.setAuthServerUrl(this.authServerUrl);
         return t;
     }

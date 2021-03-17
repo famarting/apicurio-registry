@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
  * Root Type for Tenant
  * <p>
  * Models a single tenant.
- * 
+ *
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -28,7 +28,7 @@ public class RegistryTenant {
     /**
      * Unique identifier of a tenant within a registry deployment
      * (Required)
-     * 
+     *
      */
     @JsonProperty("tenantId")
     @JsonPropertyDescription("Unique identifier of a tenant within a registry deployment")
@@ -36,7 +36,7 @@ public class RegistryTenant {
     /**
      * Date when the tenant was created
      * (Required)
-     * 
+     *
      */
     @JsonProperty("createdOn")
     @JsonPropertyDescription("Date when the tenant was created")
@@ -44,29 +44,32 @@ public class RegistryTenant {
     /**
      * User that created the tenant
      * (Required)
-     * 
+     *
      */
     @JsonProperty("createdBy")
     @JsonPropertyDescription("User that created the tenant")
     private String createdBy;
     /**
-     * 
+     *
      */
     @JsonProperty("organizationId")
     @JsonPropertyDescription("")
     private Object organizationId;
     /**
-     * Http endpoint for the auth server (including realm) to be used for this tenant to authenticate against the registry
+     * Http endpoint for the auth server (REALM NOT INCLUDED) to be used for this tenant to authenticate against the registry
      * (Required)
-     * 
+     *
      */
     @JsonProperty("authServerUrl")
     @JsonPropertyDescription("Http endpoint for the auth server (including realm) to be used for this tenant to authenticate against the registry")
     private String authServerUrl;
+
+    private String authRealm;
+
     /**
      * ClientId in the authentication server to be used by the registry to authenticate incoming requests made by the tenant
      * (Required)
-     * 
+     *
      */
     @JsonProperty("authClientId")
     @JsonPropertyDescription("ClientId in the authentication server to be used by the registry to authenticate incoming requests made by the tenant")
@@ -75,7 +78,7 @@ public class RegistryTenant {
     /**
      * Unique identifier of a tenant within a registry deployment
      * (Required)
-     * 
+     *
      */
     @JsonProperty("tenantId")
     public String getTenantId() {
@@ -85,7 +88,7 @@ public class RegistryTenant {
     /**
      * Unique identifier of a tenant within a registry deployment
      * (Required)
-     * 
+     *
      */
     @JsonProperty("tenantId")
     public void setTenantId(String tenantId) {
@@ -161,7 +164,7 @@ public class RegistryTenant {
     /**
      * Http endpoint for the auth server (including realm) to be used for this tenant to authenticate against the registry
      * (Required)
-     * 
+     *
      */
     @JsonProperty("authServerUrl")
     public void setAuthServerUrl(String authServerUrl) {
@@ -169,9 +172,23 @@ public class RegistryTenant {
     }
 
     /**
+     * @return the authRealm
+     */
+    public String getAuthRealm() {
+        return authRealm;
+    }
+
+    /**
+     * @param authRealm the authRealm to set
+     */
+    public void setAuthRealm(String authRealm) {
+        this.authRealm = authRealm;
+    }
+
+    /**
      * ClientId in the authentication server to be used by the registry to authenticate incoming requests made by the tenant
      * (Required)
-     * 
+     *
      */
     @JsonProperty("authClientId")
     public String getAuthClientId() {

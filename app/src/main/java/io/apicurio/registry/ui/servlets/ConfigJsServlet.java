@@ -33,7 +33,10 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.apicurio.registry.mt.TenantContext;
+import io.apicurio.registry.mt.TenantIdResolver;
 import io.apicurio.registry.ui.beans.ConfigJs;
+import io.apicurio.registry.ui.beans.ConfigJsUi;
 import io.apicurio.registry.ui.config.UiConfigProperties;
 import io.apicurio.registry.utils.StringUtil;
 import io.quarkus.security.identity.SecurityIdentity;
@@ -51,6 +54,12 @@ public class ConfigJsServlet extends HttpServlet {
 
     @Inject
     SecurityIdentity identity;
+
+    @Inject
+    TenantContext tenantContext;
+
+    @Inject
+    TenantIdResolver tenantIdResolver;
 
     /**
      * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
@@ -73,8 +82,7 @@ public class ConfigJsServlet extends HttpServlet {
 
             config.artifacts.url = this.generateApiUrl(request);
 
-            config.ui.url = this.generateUiUrl(request);
-            config.ui.contextPath = "/ui";
+            config.ui = this.generateUiConfigJs(request);
 
             config.features.readOnly = uiConfig.isFeatureReadOnly();
 
@@ -108,6 +116,9 @@ public class ConfigJsServlet extends HttpServlet {
      */
     private String generateApiUrl(HttpServletRequest request) {
         String apiRelativePath = "/apis/registry";
+        if (tenantContext.isLoaded()) {
+            apiRelativePath = tenantIdResolver.tenantBasePath(tenantContext.tenantId()) + apiRelativePath;
+        }
         try {
             String apiUrl = uiConfig.getApiUrl();
             if (!"_".equals(apiUrl) && !StringUtil.isEmpty(apiUrl)) {
@@ -134,24 +145,39 @@ public class ConfigJsServlet extends HttpServlet {
      * Generates a URL that the caller can use to access the UI.
      * @param request
      */
-    private String generateUiUrl(HttpServletRequest request) {
+    private ConfigJsUi generateUiConfigJs(HttpServletRequest request) {
         try {
             String uiUrl = uiConfig.getUiUrl();
             if (!"_".equals(uiUrl) && !StringUtil.isEmpty(uiUrl)) {
-                return uiUrl;
+                ConfigJsUi config = new ConfigJsUi();
+                config.url = uiUrl;
+                config.contextPath = "/ui";
+                return config;
             }
 
-            String url = resolveUrlFromXForwarded(request, "/ui");
+            String uiRelativePath = "/ui";
+            if (tenantContext.isLoaded()) {
+                uiRelativePath = tenantIdResolver.tenantBasePath(tenantContext.tenantId()) + uiRelativePath;
+            }
+
+            String url = resolveUrlFromXForwarded(request, uiRelativePath);
             if (url != null) {
-                return url;
+                ConfigJsUi config = new ConfigJsUi();
+                config.url = url;
+                config.contextPath = uiRelativePath;
+                return config;
             }
 
             url = request.getRequestURL().toString();
-            url = new URI(url).resolve("/ui").toString();
+            url = new URI(url).resolve(uiRelativePath).toString();
             if (url.startsWith("http:") && request.isSecure()) {
                 url = url.replaceFirst("http", "https");
             }
-            return url;
+
+            ConfigJsUi config = new ConfigJsUi();
+            config.url = url;
+            config.contextPath = uiRelativePath;
+            return config;
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }

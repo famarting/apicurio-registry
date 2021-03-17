@@ -17,6 +17,7 @@
 package io.apicurio.registry.rest;
 
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -32,6 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.apicurio.registry.mt.MultitenancyProperties;
 import io.apicurio.registry.mt.TenantIdResolver;
 import io.apicurio.registry.services.DisabledApisMatcherService;
 
@@ -52,6 +54,11 @@ public class RegistryApplicationServletFilter implements Filter {
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
+    private Pattern uiPattern = Pattern.compile("/ui/.*");
+
+    @Inject
+    MultitenancyProperties mtProperties;
+
     @Inject
     TenantIdResolver tenantIdResolver;
 
@@ -70,7 +77,7 @@ public class RegistryApplicationServletFilter implements Filter {
         String requestURI = req.getRequestURI();
         if (requestURI != null) {
 
-            boolean resolved = tenantIdResolver.resolveTenantId(requestURI, () -> req.getHeader(Headers.TENANT_ID),
+            boolean tenantIdResolved = tenantIdResolver.resolveTenantId(requestURI, () -> req.getHeader(Headers.TENANT_ID),
                     (tenantId) -> {
 
                         String actualUri = requestURI.substring(tenantIdResolver.tenantPrefixLength(tenantId));
@@ -84,13 +91,23 @@ public class RegistryApplicationServletFilter implements Filter {
 
                     });
 
-            boolean rewriteRequest = resolved && rewriteContext.length() != 0;
+            boolean rewriteRequest = tenantIdResolved && rewriteContext.length() != 0;
             String evaluatedURI = requestURI;
             if (rewriteRequest) {
                 evaluatedURI = rewriteContext.toString();
             }
 
             boolean disabled = disabledApisMatcherService.isDisabled(evaluatedURI);
+
+            //if multitenancy is enabled the UI can only be accessed via the tenant specific URL, otherwise the UI is disabled
+            //maybe in the future if some proxy is used for the UI and that proxy is able to set the tenantId as a header we have to change this logic
+            if (!disabled && mtProperties.isMultitenancyEnabled() && !tenantIdResolved && uiPattern.matcher(evaluatedURI).matches()) {
+                log.debug("Disabling request, access to UI is only permitted through tenant specific urls");
+                disabled = true;
+            } else {
+                log.debug("Allowing request");
+            }
+
             if (disabled) {
                 HttpServletResponse httpResponse = (HttpServletResponse) response;
                 httpResponse.reset();

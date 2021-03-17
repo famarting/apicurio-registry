@@ -26,6 +26,9 @@ import javax.inject.Inject;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
+import io.apicurio.multitenant.api.datamodel.RegistryTenant;
+import io.apicurio.registry.mt.TenantContext;
+import io.apicurio.registry.mt.TenantMetadataService;
 import io.apicurio.registry.utils.RegistryProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +41,7 @@ import org.slf4j.LoggerFactory;
 public class UiConfigProperties {
 
     private static final Logger logger = LoggerFactory.getLogger(UiConfigProperties.class);
-    
+
     @Inject
     @ConfigProperty(name = "registry.ui.features.readOnly", defaultValue = "false")
     boolean featureReadOnly;
@@ -55,8 +58,14 @@ public class UiConfigProperties {
     @ConfigProperty(name = "quarkus.oidc.tenant-enabled", defaultValue = "false")
     boolean tenantEnabled;
 
+    @Inject
+    TenantContext tenantContext;
+
+    @Inject
+    TenantMetadataService tenantMetadataService;
+
     private final Map<String, Object> keycloakConfig;
-    
+
     /**
      * Constructor.
      * @param kcProperties
@@ -65,7 +74,7 @@ public class UiConfigProperties {
         this.keycloakConfig = new HashMap<>();
         kcProperties.stringPropertyNames().forEach(key -> keycloakConfig.put(key, kcProperties.get(key)));
     }
-    
+
     @PostConstruct
     void onConstruct() {
         logger.debug("============> kcProperties  " + keycloakConfig);
@@ -76,21 +85,31 @@ public class UiConfigProperties {
     }
 
     public Map<String, Object> getKeycloakProperties() {
-        return keycloakConfig;
+        if (tenantContext.isLoaded()) {
+            RegistryTenant meta = tenantMetadataService.getTenant(tenantContext.tenantId());
+            Map<String, Object> config = new HashMap<>();
+            config.put("url", meta.getAuthServerUrl());
+            config.put("realm", meta.getAuthRealm());
+            config.put("clientId", meta.getAuthClientId());
+            config.put("onLoad", "login-required");
+            return config;
+        } else {
+            return keycloakConfig;
+        }
     }
-    
+
     public boolean isFeatureReadOnly() {
         return featureReadOnly;
     }
-    
+
     public String getUiUrl() {
         return uiUrl;
     }
-    
+
     public String getApiUrl() {
         return apiUrl;
     }
-    
+
     public boolean isKeycloakAuthEnabled() {
         return tenantEnabled;
     }

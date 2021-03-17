@@ -86,7 +86,10 @@ public class CustomTenantConfigResolver implements TenantConfigResolver {
         final OidcTenantConfig config = new OidcTenantConfig();
 
         config.setTenantId(registryTenant.getTenantId());
-        config.setAuthServerUrl(registryTenant.getAuthServerUrl());
+
+        String authServerUrl = registryTenant.getAuthServerUrl() + "/realms/" + registryTenant.getAuthRealm();
+        config.setAuthServerUrl(authServerUrl);
+
         config.setClientId(registryTenant.getAuthClientId());
 
         if (tlsVerification.isPresent() && tlsVerification.get().equalsIgnoreCase("none")) {
