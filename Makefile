@@ -14,3 +14,10 @@ tenant-manager-container-native:
 	docker build -f multitenancy/tenant-manager-api/src/main/docker/Dockerfile.native -t apicurio/apicurio-registry-tenant-manager-api:$(CONTAINER_IMAGE_TAG) ./multitenancy/tenant-manager-api/
 
 .PHONY: tenant-manager-build tenant-manager-container
+
+build-multitenant-registry:
+	mvn install -Pprod -pl storage/sql/ -am -DskipTests -Psql
+	mvn package -Pprod -Psql -DskipTests -Ddocker -pl distro/docker
+	docker tag apicurio/apicurio-registry-sql:latest quay.io/famargon/apicurio-registry-sql:latest-local
+	mvn clean -pl distro/docker-compose
+	docker-compose -f distro/docker-compose/src/main/resources/compose-base-sql.yml up
