@@ -16,6 +16,7 @@
 
 package io.apicurio.registry.mt;
 
+import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import io.apicurio.registry.mt.MultitenancyProperties;
 import io.apicurio.registry.mt.TenantIdResolver;
 import io.apicurio.registry.services.DisabledApisMatcherService;
+import io.apicurio.registry.ui.servlets.MultitenancyAwareUIFilter;
 
 /**
  *
@@ -65,6 +66,9 @@ public class RegistryApplicationServletFilter implements Filter {
     @Inject
     DisabledApisMatcherService disabledApisMatcherService;
 
+    @Inject
+    MultitenancyAwareUIFilter uiFilter;
+
     /**
      * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain)
      */
@@ -81,8 +85,9 @@ public class RegistryApplicationServletFilter implements Filter {
                     (tenantId) -> {
 
                         String actualUri = requestURI.substring(tenantIdResolver.tenantPrefixLength(tenantId));
-                        if (actualUri.length() == 0) {
-                            actualUri = "/";
+                        if (actualUri.length() == 0 || actualUri.equals("/")) {
+                            //IMPORTANT "redirect" tenant to the UI
+                            actualUri = "/ui";
                         }
 
                         log.debug("Rewriting request {} to {} , tenantId {}", requestURI, actualUri, tenantId);
@@ -99,12 +104,19 @@ public class RegistryApplicationServletFilter implements Filter {
 
             boolean disabled = disabledApisMatcherService.isDisabled(evaluatedURI);
 
+            boolean isUIRequest = isUIRequest(evaluatedURI);
             //if multitenancy is enabled the UI can only be accessed via the tenant specific URL, otherwise the UI is disabled
             //maybe in the future if some proxy is used for the UI and that proxy is able to set the tenantId as a header we have to change this logic
-            if (!disabled && mtProperties.isMultitenancyEnabled() && !tenantIdResolved && uiPattern.matcher(evaluatedURI).matches()) {
-                log.debug("Disabling request, access to UI is only permitted through tenant specific urls");
-                disabled = true;
-            } else {
+            if (!disabled && isUIRequest) {
+                if (tenantIdResolved) {
+                    uiFilter.doFilter(request, response, chain);
+                    return;
+                } else {
+                    log.debug("Disabling request, access to UI is only permitted through tenant specific urls");
+                    disabled = true;
+                }
+            }
+            if (!disabled) {
                 log.debug("Allowing request");
             }
 
@@ -125,6 +137,10 @@ public class RegistryApplicationServletFilter implements Filter {
 
         chain.doFilter(request, response);
 
+    }
+
+    private boolean isUIRequest(String uri) {
+        return "/ui".equals(uri) || uiPattern.matcher(uri).matches();
     }
 
 }
