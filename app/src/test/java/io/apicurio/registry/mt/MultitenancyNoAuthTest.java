@@ -66,8 +66,24 @@ public class MultitenancyNoAuthTest extends AbstractResourceTestBase {
             throw new TestAbortedException("Multitenancy not supported - aborting test");
         }
 
-        RegistryClient clientTenant1 = RegistryClientFactory.create("http://localhost:8081/t/" + UUID.randomUUID().toString() + "/apis/registry/v2" );
+        String tenantId1 = UUID.randomUUID().toString();
+        RegistryClient clientTenant1 = RegistryClientFactory.create("http://localhost:8081/t/" + tenantId1 + "/apis/registry/v2" );
         RegistryClient clientTenant2 = RegistryClientFactory.create("http://localhost:8081/t/" + UUID.randomUUID().toString() + "/apis/registry/v2" );
+
+        //ui can only be access using the tenant specific url
+        given()
+            .baseUri("http://localhost:8081")
+            .when()
+                .get("/ui")
+            .then()
+                .statusCode(404);
+        given()
+            .baseUri("http://localhost:8081")
+            .when()
+                .get("/t/" + tenantId1 + "/ui")
+            .then()
+                .statusCode(200);
+//                .statusCode(CoreMatchers.not(404));
 
         try {
             tenantOperations(clientTenant1);
