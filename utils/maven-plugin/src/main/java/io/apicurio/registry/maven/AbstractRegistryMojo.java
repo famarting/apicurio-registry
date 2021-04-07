@@ -1,6 +1,6 @@
 /*
  * Copyright 2018 Confluent Inc. (adapted from their Mojo)
- * Copyright 2019 Red Hat
+ * Copyright 2020 Red Hat
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,13 @@
 
 package io.apicurio.registry.maven;
 
-import io.apicurio.registry.client.RegistryClient;
-import io.apicurio.registry.client.RegistryService;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
+
+import io.apicurio.registry.rest.client.RegistryClient;
+import io.apicurio.registry.rest.client.RegistryClientFactory;
 
 /**
  * Base class for all Registry Mojo's.
@@ -39,31 +40,22 @@ public abstract class AbstractRegistryMojo extends AbstractMojo {
     @Parameter(required = true)
     String registryUrl;
 
-    private RegistryService client;
+    private RegistryClient client;
 
-    protected RegistryService getClient() {
+    protected RegistryClient getClient() {
         if (client == null) {
-            client = RegistryClient.cached(registryUrl);
+            client = RegistryClientFactory.create(registryUrl);
         }
         return client;
     }
 
-    protected void setClient(RegistryService client) {
+    protected void setClient(RegistryClient client) {
         this.client = client;
     }
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
-        try {
-            executeInternal();
-        } finally {
-            if (client != null) {
-                try {
-                    client.close();
-                } catch (Exception ignored) {
-                }
-            }
-        }
+        executeInternal();
     }
 
     protected abstract void executeInternal() throws MojoExecutionException, MojoFailureException;

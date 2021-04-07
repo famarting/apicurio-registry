@@ -1,6 +1,6 @@
 /*
  * Copyright 2018 Confluent Inc.
- * Copyright 2019 Red Hat
+ * Copyright 2020 Red Hat
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,9 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.IntNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.apicurio.registry.utils.serde.avro.NonRecordContainer;
+
+import io.apicurio.registry.serde.avro.NonRecordContainer;
+
 import org.apache.avro.JsonProperties;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericEnumSymbol;
@@ -65,6 +67,7 @@ import java.util.Set;
 /**
  * Utilities for converting between our runtime data format and Avro, and (de)serializing that data.
  */
+@SuppressWarnings({"unused", "rawtypes", "unchecked"})
 public class AvroData {
 
     public static final String NAMESPACE = "io.confluent.connect.avro";
@@ -382,6 +385,7 @@ public class AvroData {
      *                                       null
      * @return the converted data
      */
+    @SuppressWarnings("unused")
     private static Object fromConnectData(
         Schema schema, org.apache.avro.Schema avroSchema,
         Object logicalValue, boolean requireContainer,
@@ -1085,6 +1089,7 @@ public class AvroData {
     // though you can get a default value from the schema, default values for complex structures need
     // to perform the same translation but those defaults will be part of the original top-level
     // (complex type) default value, not part of the child schema.
+    @SuppressWarnings("deprecation")
     private static JsonNode defaultValueFromConnect(Schema schema, Object value) {
         try {
             // If this is a logical type, convert it from the convenient Java type to the underlying

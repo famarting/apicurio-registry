@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Red Hat
+ * Copyright 2020 Red Hat
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,16 +40,12 @@ public class RegistryStorageException extends StorageException {
         super(reason, cause);
     }
 
+    /**
+     * Constructor.
+     * @param reason
+     */
     public RegistryStorageException(String reason) {
         super(reason);
-    }
-
-    /**
-     * @see java.lang.Throwable#getMessage()
-     */
-    @Override
-    public String getMessage() {
-        return "An unexpected server error was encountered.";
     }
 
 }

@@ -15,5 +15,5 @@
  * limitations under the License.
  */
 
-export * from './rules';
-export * from './components';
+export * from "./rules";
+export * from "./components";

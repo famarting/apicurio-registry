@@ -20,8 +20,12 @@ import "./content.css";
 import {PureComponent, PureComponentProps, PureComponentState} from "../../../../components";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-json";
-import "ace-builds/src-noconflict/theme-tomorrow";
+import "ace-builds/src-noconflict/mode-protobuf";
+import "ace-builds/src-noconflict/mode-xml";
+import "ace-builds/src-noconflict/mode-graphqlschema";
 import "ace-builds/src-noconflict/theme-monokai";
+import {Button} from "@patternfly/react-core";
+import {Services} from "@apicurio/registry-services";
 
 
 /**
@@ -30,6 +34,7 @@ import "ace-builds/src-noconflict/theme-monokai";
 // tslint:disable-next-line:no-empty-interface
 export interface ContentTabContentProps extends PureComponentProps {
     artifactContent: string;
+    artifactType: string;
 }
 
 /**
@@ -37,6 +42,9 @@ export interface ContentTabContentProps extends PureComponentProps {
  */
 // tslint:disable-next-line:no-empty-interface
 export interface ContentTabContentState extends PureComponentState {
+    content: string;
+    contentIsJson: boolean;
+    formatBtnClasses: string;
     editorWidth: string;
     editorHeight: string;
 }
@@ -60,14 +68,14 @@ export class ContentTabContent extends PureComponent<ContentTabContentProps, Con
                 this.setSingleState("editorHeight", height + "px");
             }
         }
-
     }
 
     public render(): React.ReactElement {
         return (
             <div className="ace-wrapper" id="ace-wrapper">
                 <AceEditor
-                    mode="json"
+                    data-testid="ace-content"
+                    mode={this.editorMode()}
                     theme="monokai"
                     name="artifactContent"
                     className="artifactContent"
@@ -77,7 +85,7 @@ export class ContentTabContent extends PureComponent<ContentTabContentProps, Con
                     showPrintMargin={false}
                     showGutter={true}
                     highlightActiveLine={false}
-                    value={this.props.artifactContent}
+                    value={this.state.content}
                     readOnly={true}
                     setOptions={{
                         enableBasicAutocompletion: false,
@@ -85,17 +93,68 @@ export class ContentTabContent extends PureComponent<ContentTabContentProps, Con
                         enableSnippets: false,
                         showLineNumbers: true,
                         tabSize: 2,
+                        useWorker: false
                     }}
                 />
+                <Button className={this.state.formatBtnClasses} key="format" variant="primary" data-testid="modal-btn-edit" onClick={this.format}>Format</Button>
             </div>
         );
     }
 
     protected initializeState(): ContentTabContentState {
+        const contentIsJson: boolean = this.isJson(this.props.artifactContent);
+        let formatBtnClasses: string = "format-btn";
+        if (!contentIsJson) {
+            formatBtnClasses += " hidden";
+        }
         return {
+            content: this.props.artifactContent,
+            contentIsJson,
             editorHeight: "500px",
-            editorWidth: "100%"
+            editorWidth: "100%",
+            formatBtnClasses
         };
+    }
+
+    private editorMode(): string {
+        if (this.props.artifactType === "PROTOBUF") {
+            return "protobuf";
+        }
+        if (this.props.artifactType === "WSDL" || this.props.artifactType === "XSD" || this.props.artifactType === "XML") {
+            return "xml";
+        }
+        if (this.props.artifactType === "GRAPHQL") {
+            return "graphqlschema";
+        }
+        return "json";
+    }
+
+    private format = (): void => {
+        if (!this.state.contentIsJson) {
+            return;
+        }
+        try {
+            const pval: any = JSON.parse(this.props.artifactContent);
+            if (pval) {
+                this.setSingleState("content", JSON.stringify(pval, null, 2));
+            }
+        } catch (e) {
+            // Do nothing
+            Services.getLoggerService().warn("Failed to format content!");
+            Services.getLoggerService().error(e);
+        }
+    }
+
+    private isJson(content: string): boolean {
+        try {
+            const pval: any = JSON.parse(content);
+            if (pval) {
+                return true;
+            }
+        } catch (e) {
+            // Do nothing
+        }
+        return false;
     }
 }
 

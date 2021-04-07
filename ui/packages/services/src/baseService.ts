@@ -19,6 +19,10 @@
 import {LoggerService} from "./logger";
 import {ConfigService} from "./config";
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import {ContentTypes} from "@apicurio/registry-models";
+import {AuthService} from "./auth";
+
+const AXIOS = axios.create();
 
 /**
  * Interface implemented by all services.
@@ -27,7 +31,6 @@ export interface Service {
     init(): void;
 }
 
-
 /**
  * Base class for all services.
  */
@@ -35,7 +38,7 @@ export abstract class BaseService implements Service {
 
     protected logger: LoggerService = null;
     protected config: ConfigService = null;
-
+    protected auth: AuthService = null;
     private apiBaseHref: string;
 
     public init(): void {
@@ -44,6 +47,12 @@ export abstract class BaseService implements Service {
             this.apiBaseHref = this.apiBaseHref.substring(0, this.apiBaseHref.length - 1);
         }
         this.logger.debug("[BaseService] Base HREF of REST API: ", this.apiBaseHref);
+
+        this.initAuthInterceptor();
+    }
+
+    public initAuthInterceptor() {
+        AXIOS.interceptors.request.use(this.auth.getAuthInterceptor());
     }
 
     /**
@@ -98,11 +107,11 @@ export abstract class BaseService implements Service {
         this.logger.info("[BaseService] Making a GET request to: ", url);
 
         if (!options) {
-            options = this.options({ "Accept": "application/json" });
+            options = this.options({ "Accept": ContentTypes.APPLICATION_JSON });
         }
 
         const config: AxiosRequestConfig = this.axiosConfig("get", url, options);
-        return axios.request(config)
+        return AXIOS.request(config)
             .then(response => {
                 const data: T = response.data;
                 if (successCallback) {
@@ -110,6 +119,8 @@ export abstract class BaseService implements Service {
                 } else {
                     return data;
                 }
+            }).catch(error => {
+                return Promise.reject(this.unwrapErrorData(error));
             });
     }
 
@@ -124,17 +135,19 @@ export abstract class BaseService implements Service {
         this.logger.info("[BaseService] Making a POST request to: ", url);
 
         if (!options) {
-            options = this.options({ "Content-Type": "application/json" });
+            options = this.options({ "Content-Type": ContentTypes.APPLICATION_JSON });
         }
 
         const config: AxiosRequestConfig = this.axiosConfig("post", url, options, body);
-        return axios.request(config)
+        return AXIOS.request(config)
             .then(() => {
                 if (successCallback) {
                     return successCallback();
                 } else {
                     return;
                 }
+            }).catch(error => {
+                return Promise.reject(this.unwrapErrorData(error));
             });
     }
 
@@ -149,11 +162,11 @@ export abstract class BaseService implements Service {
         this.logger.info("[BaseService] Making a POST request to: ", url);
 
         if (!options) {
-            options = this.options({ "Accept": "application/json", "Content-Type": "application/json" });
+            options = this.options({ "Accept": ContentTypes.APPLICATION_JSON, "Content-Type": ContentTypes.APPLICATION_JSON });
         }
 
         const config: AxiosRequestConfig = this.axiosConfig("post", url, options, body);
-        return axios.request(config)
+        return AXIOS.request(config)
             .then(response => {
                 const data: O = response.data;
                 if (successCallback) {
@@ -161,6 +174,8 @@ export abstract class BaseService implements Service {
                 } else {
                     return data;
                 }
+            }).catch(error => {
+                return Promise.reject(this.unwrapErrorData(error));
             });
     }
 
@@ -175,17 +190,19 @@ export abstract class BaseService implements Service {
         this.logger.info("[BaseService] Making a PUT request to: ", url);
 
         if (!options) {
-            options = this.options({ "Content-Type": "application/json" });
+            options = this.options({ "Content-Type": ContentTypes.APPLICATION_JSON });
         }
 
         const config: AxiosRequestConfig = this.axiosConfig("put", url, options, body);
-        return axios.request(config)
+        return AXIOS.request(config)
             .then(() => {
                 if (successCallback) {
                     return successCallback();
                 } else {
                     return;
                 }
+            }).catch(error => {
+                return Promise.reject(this.unwrapErrorData(error));
             });
     }
 
@@ -200,11 +217,11 @@ export abstract class BaseService implements Service {
         this.logger.info("[BaseService] Making a PUT request to: ", url);
 
         if (!options) {
-            options = this.options({ "Accept": "application/json", "Content-Type": "application/json" });
+            options = this.options({ "Accept": ContentTypes.APPLICATION_JSON, "Content-Type": ContentTypes.APPLICATION_JSON });
         }
 
         const config: AxiosRequestConfig = this.axiosConfig("put", url, options, body);
-        return axios.request(config)
+        return AXIOS.request(config)
             .then(response => {
                 const data: O = response.data;
                 if (successCallback) {
@@ -212,6 +229,8 @@ export abstract class BaseService implements Service {
                 } else {
                     return data;
                 }
+            }).catch(error => {
+                return Promise.reject(this.unwrapErrorData(error));
             });
     }
 
@@ -228,9 +247,11 @@ export abstract class BaseService implements Service {
         }
 
         const config: AxiosRequestConfig = this.axiosConfig("delete", url, options);
-        return axios.request(config)
+        return AXIOS.request(config)
             .then(() => {
                 return successCallback ? successCallback() : null;
+            }).catch(error => {
+                return Promise.reject(this.unwrapErrorData(error));
             });
     }
 
@@ -243,6 +264,13 @@ export abstract class BaseService implements Service {
                     return status >= 200 && status < 300;
                 }
             }, ...options};
+    }
+
+    private unwrapErrorData(error: any): any {
+        if (error.response && error.response.data) {
+            return error.response.data;
+        }
+        return error;
     }
 
 }

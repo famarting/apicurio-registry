@@ -16,6 +16,8 @@
  */
 
 export * from "./artifactMetaData.model";
+export * from "./artifactTypes.model";
+export * from "./contentTypes.model";
 export * from "./rule.model";
 export * from "./searchedArtifact.model";
 export * from "./searchedVersion.model";

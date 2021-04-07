@@ -17,7 +17,8 @@
 import React from "react";
 import {Button, EmptyState, EmptyStateBody, EmptyStateIcon, EmptyStateVariant, Title} from '@patternfly/react-core';
 import {PlusCircleIcon} from "@patternfly/react-icons";
-import {PureComponent, PureComponentProps, PureComponentState} from "../../../../components";
+import {IfAuth, PureComponent, PureComponentProps, PureComponentState} from "../../../../components";
+import {IfFeature} from "../../../../components/common/ifFeature";
 
 /**
  * Properties
@@ -59,11 +60,15 @@ export class ArtifactsPageEmptyState extends PureComponent<ArtifactsPageEmptySta
                         </EmptyStateBody>
                         :
                         <EmptyStateBody>
-                            There are currently no artifacts in the registry. You may want to upload something by
-                            clicking the button below.
+                            There are currently no artifacts in the registry.  Artifacts must be created before
+                            you will see anything here.
                         </EmptyStateBody>
                 }
-                <Button variant="primary" onClick={this.props.onUploadArtifact}>Upload artifact</Button>
+                <IfAuth isDeveloper={true}>
+                    <IfFeature feature="readOnly" isNot={true}>
+                        <Button variant="primary" data-testid="empty-btn-upload" onClick={this.props.onUploadArtifact}>Upload artifact</Button>
+                    </IfFeature>
+                </IfAuth>
             </EmptyState>
         );
     }

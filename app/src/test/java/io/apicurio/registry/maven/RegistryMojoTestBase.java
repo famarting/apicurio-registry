@@ -1,6 +1,6 @@
 /*
  * Copyright 2018 Confluent Inc. (adapted from their MojoTest)
- * Copyright 2019 Red Hat
+ * Copyright 2020 Red Hat
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ public class RegistryMojoTestBase extends AbstractResourceTestBase {
 
     @BeforeEach
     public void createTempDirectory() throws IOException {
-        this.tempDirectory = File.createTempFile(getClass().getSimpleName(), "tmp");
+        this.tempDirectory = File.createTempFile(getClass().getSimpleName(), ".tmp");
         this.tempDirectory.delete();
         this.tempDirectory.mkdirs();
     }
@@ -50,6 +50,7 @@ public class RegistryMojoTestBase extends AbstractResourceTestBase {
     protected void writeContent(File outputPath, byte[] content) throws IOException {
         try (OutputStream writer = new FileOutputStream(outputPath)) {
             writer.write(content);
+            writer.flush();
         }
     }
 }

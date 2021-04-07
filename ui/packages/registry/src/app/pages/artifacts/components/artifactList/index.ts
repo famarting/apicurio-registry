@@ -15,4 +15,6 @@
  * limitations under the License.
  */
 
-export * from './artifactList';
+export * from "./artifactList";
+export * from "./artifactGroup";
+export * from "./artifactName";

@@ -64,7 +64,7 @@ export class RulesPage extends PageComponent<RulesPageProps, RulesPageState> {
                 </PageSection>
                 <PageSection variant={PageSectionVariants.default} isFilled={true}>
                     {
-                        this.state.isLoading ?
+                        this.isLoading() ?
                             <Flex>
                                 <FlexItem><Spinner size="lg"/></FlexItem>
                                 <FlexItem><span>Loading, please wait...</span></FlexItem>
@@ -84,22 +84,19 @@ export class RulesPage extends PageComponent<RulesPageProps, RulesPageState> {
 
     protected initializeState(): RulesPageState {
         return {
-            error: null,
-            errorInfo: null,
-            errorType: null,
-            isError: false,
             isLoading: true,
             rules: null
         };
     }
 
-    protected loadPageData(): void {
-        Services.getGlobalsService().getRules().then( rules => {
-            this.setMultiState({
-                isLoading: false,
-                rules
+    // @ts-ignore
+    protected createLoaders(): Promise {
+        return Services.getAdminService().getRules().then( rules => {
+                this.setMultiState({
+                    isLoading: false,
+                    rules
+                });
             });
-        });
     }
 
     private rules(): Rule[] {
@@ -116,7 +113,7 @@ export class RulesPage extends PageComponent<RulesPageProps, RulesPageState> {
         if (ruleType === "COMPATIBILITY") {
             config = "BACKWARD";
         }
-        Services.getGlobalsService().createRule(ruleType, config).catch(error => {
+        Services.getAdminService().createRule(ruleType, config).catch(error => {
             this.handleServerError(error, `Error enabling "${ ruleType }" global rule.`);
         });
         this.setSingleState("rules", [...this.rules(), {config, type: ruleType}]);
@@ -124,7 +121,7 @@ export class RulesPage extends PageComponent<RulesPageProps, RulesPageState> {
 
     private doDisableRule = (ruleType: string): void => {
         Services.getLoggerService().debug("[RulesPage] Disabling global rule:", ruleType);
-        Services.getGlobalsService().deleteRule(ruleType).catch(error => {
+        Services.getAdminService().deleteRule(ruleType).catch(error => {
             this.handleServerError(error, `Error disabling "${ ruleType }" global rule.`);
         });
         this.setSingleState("rules", this.rules().filter(r => r.type !== ruleType));
@@ -132,7 +129,7 @@ export class RulesPage extends PageComponent<RulesPageProps, RulesPageState> {
 
     private doConfigureRule = (ruleType: string, config: string): void => {
         Services.getLoggerService().debug("[RulesPage] Configuring global rule:", ruleType, config);
-        Services.getGlobalsService().updateRule(ruleType, config).catch(error => {
+        Services.getAdminService().updateRule(ruleType, config).catch(error => {
             this.handleServerError(error, `Error configuring "${ ruleType }" global rule.`);
         });
         this.setSingleState("rules", this.rules().map(r => {

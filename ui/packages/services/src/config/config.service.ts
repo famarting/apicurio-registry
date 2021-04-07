@@ -15,15 +15,27 @@
  * limitations under the License.
  */
 
-import {ConfigType} from './config.type';
+import {ConfigType, FeaturesConfig} from './config.type';
 import {Service} from "../baseService";
 
 const DEFAULT_CONFIG: ConfigType = {
     artifacts: {
         type: "rest",
-        url: "http://localhost:8080/api/"
+        url: "http://localhost:8080/apis/registry"
     },
-    features: {},
+    auth: {
+        options: {
+            clientId:'registry-ui',
+            onLoad: 'login-required',
+            realm: 'registry',
+            url: 'http://localhost:8090/auth'
+        },
+        type: "keycloakjs"
+    },
+    features: {
+        readOnly: false,
+        breadcrumbs: true
+    },
     mode: "dev",
     ui: {
         contextPath: null,
@@ -81,4 +93,39 @@ export class ConfigService implements Service {
         return this.config.ui.contextPath;
     }
 
+    public features(): FeaturesConfig {
+        const defaults: FeaturesConfig = {
+            readOnly: false,
+            breadcrumbs: true
+        };
+        if (!this.config.features) {
+            return defaults;
+        }
+        return {
+            ...defaults,
+            ...this.config.features
+        };
+    }
+
+    public featureReadOnly(): boolean {
+        return this.features().readOnly;
+    }
+
+    public featureBreadcrumbs(): boolean {
+        return this.features().breadcrumbs;
+    }
+
+    public authType(): string {
+        if (!this.config.auth || !this.config.auth.type) {
+            return "";
+        }
+        return this.config.auth.type;
+    }
+
+    public authOptions(): any {
+        if (!this.config.auth || !this.config.auth.options) {
+            return "";
+        }
+        return this.config.auth.options;
+    }
 }

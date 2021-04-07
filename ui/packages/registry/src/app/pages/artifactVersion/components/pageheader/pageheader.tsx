@@ -17,22 +17,32 @@
 
 import React from "react";
 import "./pageheader.css";
-import {Button, Flex, FlexItem, FlexModifiers, Text, TextContent, TextVariants} from '@patternfly/react-core';
-import {PureComponent, PureComponentProps, PureComponentState} from "../../../../components";
-import {VersionMetaData} from "@apicurio/registry-models";
+import {
+    Button,
+    Flex,
+    FlexItem,
+    FlexModifiers,
+    Text,
+    TextContent,
+    TextVariants
+} from '@patternfly/react-core';
+import {IfAuth, PureComponent, PureComponentProps, PureComponentState} from "../../../../components";
+import {SearchedVersion} from "@apicurio/registry-models";
 import {VersionSelector} from "./version-selector";
 import {TrashIcon} from "@patternfly/react-icons";
+import {IfFeature} from "../../../../components/common/ifFeature";
 
 
 /**
  * Properties
  */
 export interface ArtifactVersionPageHeaderProps extends PureComponentProps {
+    groupId: string;
     artifactId: string;
     onDeleteArtifact: () => void;
     onUploadVersion: () => void;
     version: string;
-    versions: VersionMetaData[];
+    versions: SearchedVersion[];
 }
 
 /**
@@ -61,9 +71,14 @@ export class ArtifactVersionPageHeader extends PureComponent<ArtifactVersionPage
                     </TextContent>
                 </FlexItem>
                 <FlexItem breakpointMods={[{modifier: FlexModifiers["align-right"]}]}>
-                    <VersionSelector version={this.props.version} versions={this.props.versions} artifactId={this.props.artifactId} />
-                    <Button id="upload-version-button" variant="secondary" onClick={this.props.onUploadVersion}>Upload new version</Button>
-                    <Button id="delete-artifact-button" variant="danger" onClick={this.props.onDeleteArtifact}><TrashIcon /></Button>
+                    <VersionSelector version={this.props.version} versions={this.props.versions}
+                                     groupId={this.props.groupId} artifactId={this.props.artifactId} />
+                    <IfAuth isDeveloper={true}>
+                        <IfFeature feature="readOnly" isNot={true}>
+                            <Button id="upload-version-button" variant="secondary" data-testid="header-btn-upload-version" onClick={this.props.onUploadVersion}>Upload new version</Button>
+                            <Button id="delete-artifact-button" variant="danger" data-testid="header-btn-delete" onClick={this.props.onDeleteArtifact}><TrashIcon /></Button>
+                        </IfFeature>
+                    </IfAuth>
                 </FlexItem>
             </Flex>
         );

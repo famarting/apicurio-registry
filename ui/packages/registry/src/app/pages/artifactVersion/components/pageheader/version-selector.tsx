@@ -19,19 +19,21 @@ import React from "react";
 import "./version-selector.css";
 import {Button, ButtonVariant, Dropdown, DropdownToggle, InputGroup, TextInput} from '@patternfly/react-core';
 import {PureComponent, PureComponentProps, PureComponentState} from "../../../../components";
-import {VersionMetaData} from "@apicurio/registry-models";
+import {SearchedVersion, VersionMetaData} from "@apicurio/registry-models";
 import {SearchIcon} from "@patternfly/react-icons";
 import Moment from "react-moment";
 import {Link} from "react-router-dom";
+import {Services} from "@apicurio/registry-services";
 
 
 /**
  * Properties
  */
 export interface VersionSelectorProps extends PureComponentProps {
+    groupId: string;
     artifactId: string;
     version: string;
-    versions: VersionMetaData[];
+    versions: SearchedVersion[];
 }
 
 /**
@@ -55,14 +57,14 @@ export class VersionSelector extends PureComponent<VersionSelectorProps, Version
     public render(): React.ReactElement {
         return (
             <Dropdown
-                className="version-selector-dropdown"
-                toggle={<DropdownToggle onToggle={this.onToggle}>Version: { this.props.version }</DropdownToggle>}
+                className={this.dropdownClasses()}
+                toggle={<DropdownToggle data-testid="versions-toggle" onToggle={this.onToggle}>Version: { this.props.version }</DropdownToggle>}
                 isOpen={this.state.isOpen}
             >
                 <div className="version-filter" style={{display: "none"}}>
                     <InputGroup>
-                        <TextInput name="filter" id="versionFilter" type="search" aria-label="Version filter" />
-                        <Button variant={ButtonVariant.control} aria-label="search button for search input">
+                        <TextInput name="filter" id="versionFilter" type="search" data-testid="versions-form-filter" aria-label="Version filter" />
+                        <Button variant={ButtonVariant.control} data-testid="versions-form-btn-search" aria-label="search button for search input">
                             <SearchIcon />
                         </Button>
                     </InputGroup>
@@ -74,13 +76,19 @@ export class VersionSelector extends PureComponent<VersionSelectorProps, Version
                     </div>
                 </div>
                 <div className="version-list">
-                    <Link key="latest" to={`/artifacts/${this.props.artifactId}/versions/latest`} className="version-item latest">
+                    <Link key="latest"
+                          data-testid="versions-lnk-latest"
+                          to={`/artifacts/${encodeURIComponent(this.props.groupId)}/${encodeURIComponent(this.props.artifactId)}/versions/latest`}
+                          className="version-item latest">
                         <span className="name">latest</span>
                         <span className="date" />
                     </Link>
                     {
-                        this.props.versions.map(v =>
-                            <Link key={v.version} to={`/artifacts/${this.props.artifactId}/versions/${v.version}`} className="version-item">
+                        this.props.versions.map((v, idx) =>
+                            <Link key={v.version}
+                                  data-testid={`versions-lnk-${idx}`}
+                                  to={`/artifacts/${encodeURIComponent(this.props.groupId)}/${encodeURIComponent(this.props.artifactId)}/versions/${v.version}`}
+                                  className="version-item">
                                 <span className="name">{ v.version }</span>
                                 <span className="date"><Moment date={v.createdOn} fromNow={true} /></span>
                             </Link>
@@ -95,6 +103,14 @@ export class VersionSelector extends PureComponent<VersionSelectorProps, Version
         return {
             isOpen: false
         };
+    }
+
+    private dropdownClasses(): string {
+        const classes: string[] = [ "version-selector-dropdown" ];
+        if (Services.getConfigService().featureReadOnly()) {
+            classes.push("dropdown-align-right");
+        }
+        return classes.join(' ');
     }
 
     private onToggle = (isOpen: boolean): void => {
