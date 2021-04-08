@@ -30,17 +30,15 @@ jobs:
       # Increased the page-file size due to memory-consumption of native-image command
       # For details see https://github.com/actions/virtual-environments/issues/785
       uses: al-cheb/configure-pagefile-action@v1.2
-    - name: Get maven wrapper
-      run: mvn -N io.takari:maven:wrapper -Dmaven=3.6.3
     - name: Set version
-      run: mvnw versions:set -DnewVersion="${{ github.event.release.tag_name }}"
+      run: mvn versions:set -DnewVersion="${{ github.event.release.tag_name }}"
       shell: cmd
     - name: Build jvm jar
-      run: mvnw -pl cli -am install
+      run: mvn -pl cli -am install
     - name: Build native executable
       # Invoke the native-image build with the necessary Visual Studio tooling/environment intialized
       run: |
         call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
-        mvnw -pl cli package -Dnative
+        mvn -pl cli package -Dnative
       shell: cmd
     
