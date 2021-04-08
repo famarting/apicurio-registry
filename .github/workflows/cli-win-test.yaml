@@ -1,20 +1,8 @@
 name: cli win test
 on:
   push:
-    paths-ignore:
-      - '.github/**'
-      - '.gitignore'
-      - 'LICENSE'
-      - 'README*'
-      - 'docs/**'
     branches: [master]
   pull_request:
-    paths-ignore:
-      - '.github/**'
-      - '.gitignore'
-      - 'LICENSE'
-      - 'README*'
-      - 'docs/**'
     branches: [master]
 
 jobs:
