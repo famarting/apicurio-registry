@@ -38,7 +38,7 @@ jobs:
     - name: Build native executable
       # Invoke the native-image build with the necessary Visual Studio tooling/environment intialized
       run: |
-        call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
+        call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x86_amd64
         mvn -pl cli package -Dnative
       shell: cmd
     
