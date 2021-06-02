@@ -10,7 +10,7 @@ IMAGE_NAME="${PROJECT_NAME}"
 IMAGE_TAG="latest"
 
 
-MVN_BUILD_COMMAND="mvn clean install -Pprod -Psql -Pmultitenancy -DskipTests"
+MVN_BUILD_COMMAND="mvn clean install -Pprod -Psql -Pmultitenancy"
 DOCKER_BUILD_COMMAND="docker build -f ./distro/docker/target/docker/Dockerfile.sql.jvm -t ${IMAGE_REGISTRY}/${IMAGE_ORG}/${IMAGE_NAME}:${IMAGE_TAG} ./distro/docker/target/docker"
 
 
@@ -56,7 +56,7 @@ build_project() {
     echo " Building Project '${PROJECT_NAME}'..."
     echo " Build Command: ${MVN_BUILD_COMMAND}"
     echo "#######################################################################################################"
-    docker run --rm -t -u $(id -u):$(id -g) -w /home/user -v $(pwd):/home/user quay.io/riprasad/srs-project-builder:latest bash -c "${MVN_BUILD_COMMAND}"
+    docker run --rm -t -u $(id -u):$(id -g) -w /home/user -v $(pwd):/home/user -v /var/run/docker.sock:/var/run/docker.sock quay.io/riprasad/srs-project-builder:latest bash -c "${MVN_BUILD_COMMAND}"
 }
 
 
@@ -69,14 +69,6 @@ build_image() {
     echo " IMAGE_TAG: ${IMAGE_TAG}"
     echo " Build Command: ${DOCKER_BUILD_COMMAND}"
     echo "#######################################################################################################"
-    echo "----------------------"
-    echo "ls -lrt"
-    echo "----------------------"
-    ls -lrt
-    echo "----------------------"
-    echo "find distro/docker"
-    echo "----------------------"
-    find distro/docker
     ${DOCKER_BUILD_COMMAND}
 }
 
