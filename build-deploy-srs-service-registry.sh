@@ -10,8 +10,8 @@ IMAGE_NAME="${PROJECT_NAME}"
 IMAGE_TAG="latest"
 
 
-MVN_BUILD_COMMAND="mvn clean install -am -Pprod -Psql -pl storage/sql -DskipTests"
-DOCKER_BUILD_COMMAND="docker build -f distro/docker/target/docker/Dockerfile.sql.jvm -t ${IMAGE_REGISTRY}/${IMAGE_ORG}/${IMAGE_NAME}:${IMAGE_TAG} distro/docker/target/docker"
+MVN_BUILD_COMMAND="mvn clean install -Pprod -Psql -Pmultitenancy -DskipTests"
+DOCKER_BUILD_COMMAND="docker build -f ./distro/docker/target/docker/Dockerfile.sql.jvm -t ${IMAGE_REGISTRY}/${IMAGE_ORG}/${IMAGE_NAME}:${IMAGE_TAG} ./distro/docker/target/docker"
 
 
 display_usage() {
@@ -69,7 +69,14 @@ build_image() {
     echo " IMAGE_TAG: ${IMAGE_TAG}"
     echo " Build Command: ${DOCKER_BUILD_COMMAND}"
     echo "#######################################################################################################"
-    find distro
+    echo "----------------------"
+    echo "ls -lrt"
+    echo "----------------------"
+    ls -lrt
+    echo "----------------------"
+    echo "find distro/docker"
+    echo "----------------------"
+    find distro/docker
     ${DOCKER_BUILD_COMMAND}
 }
 
