@@ -10,7 +10,7 @@ IMAGE_NAME="${PROJECT_NAME}"
 IMAGE_TAG="latest"
 
 
-MVN_BUILD_COMMAND="mvn clean install -am -Pprod -Psql -pl storage/sql"
+MVN_BUILD_COMMAND="mvn clean install -am -Pprod -Psql -pl storage/sql -DskipTests"
 DOCKER_BUILD_COMMAND="docker build -f ./distro/docker/target/docker/Dockerfile.sql.jvm -t ${IMAGE_REGISTRY}/${IMAGE_ORG}/${IMAGE_NAME}:${IMAGE_TAG} ./distro/docker/target/docker"
 
 
@@ -56,7 +56,7 @@ build_project() {
     echo " Building Project '${PROJECT_NAME}'..."
     echo " Build Command: ${MVN_BUILD_COMMAND}"
     echo "#######################################################################################################"
-    ${MVN_BUILD_COMMAND}
+    docker run --rm -t -u $(id -u):$(id -g) -w /home/user -v $(pwd):/home/user quay.io/riprasad/srs-project-builder:latest bash -c "${MVN_BUILD_COMMAND}"
 }
 
 
