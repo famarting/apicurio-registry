@@ -56,7 +56,7 @@ build_project() {
     echo " Building Project '${PROJECT_NAME}'..."
     echo " Build Command: ${MVN_BUILD_COMMAND}"
     echo "#######################################################################################################"
-    ${MVN_BUILD_COMMAND}
+    docker run --rm -t -u $(id -u):$(id -g) -w /home/user -v $(pwd):/home/user -v /var/run/docker.sock:/var/run/docker.sock quay.io/riprasad/srs-project-builder:latest bash -c "${MVN_BUILD_COMMAND}"
 }
 
 
