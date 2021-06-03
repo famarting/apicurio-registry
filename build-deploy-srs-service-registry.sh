@@ -154,8 +154,8 @@ main() {
     build_project
 
     # building images
-    build_image ${SERVICE_REGISTRY_IMAGE_NAME} ${SERVICE_REGISTRY_DOCKER_BUILD_COMMAND}
-    build_image ${TENANT_MANAGER_IMAGE_NAME} ${TENANT_MANAGER_DOCKER_BUILD_COMMAND}
+    build_image "${SERVICE_REGISTRY_IMAGE_NAME}" "${SERVICE_REGISTRY_DOCKER_BUILD_COMMAND}"
+    build_image "${TENANT_MANAGER_IMAGE_NAME}" "${TENANT_MANAGER_DOCKER_BUILD_COMMAND}"
 
     # logging to quay
     quay_login
