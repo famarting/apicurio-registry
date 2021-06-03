@@ -9,7 +9,7 @@ IMAGE_ORG="rhoas"
 IMAGE_TAG="latest"
 
 SKIP_TESTS=true # skipping tests since tests require docker. fabian working to fix this
-MVN_BUILD_COMMAND="-Pprod -Psql -Pkafkasql -Pmultitenancy -DskipTests=${SKIP_TESTS}"
+MVN_BUILD_COMMAND="mvn clean install -Pprod -Psql -Pkafkasql -Pmultitenancy -DskipTests=${SKIP_TESTS}"
 
 SERVICE_REGISTRY_IMAGE_NAME="srs-service-registry"
 SERVICE_REGISTRY_DOCKER_BUILD_COMMAND="docker build -f ./distro/docker/target/docker/Dockerfile.sql.jvm -t ${IMAGE_REGISTRY}/${IMAGE_ORG}/${SERVICE_REGISTRY_IMAGE_NAME}:${IMAGE_TAG} ./distro/docker/target/docker"
