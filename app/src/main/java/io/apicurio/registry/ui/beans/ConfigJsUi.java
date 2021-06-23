@@ -24,7 +24,6 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 @RegisterForReflection
 public class ConfigJsUi {
 
-    public String url;
     public String contextPath;
 
     /**

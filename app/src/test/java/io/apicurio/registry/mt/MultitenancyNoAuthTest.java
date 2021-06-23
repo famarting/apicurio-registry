@@ -29,15 +29,20 @@ import java.util.UUID;
 import javax.inject.Inject;
 
 import io.apicurio.registry.rest.client.RegistryClient;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.opentest4j.TestAbortedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.apicurio.multitenant.api.datamodel.RegistryTenant;
+import io.apicurio.registry.AbstractRegistryTestBase;
 import io.apicurio.registry.AbstractResourceTestBase;
 import io.apicurio.registry.rest.client.RegistryClientFactory;
 import io.apicurio.registry.rest.client.exception.ArtifactNotFoundException;
+import io.apicurio.registry.rest.client.exception.ForbiddenException;
+import io.apicurio.registry.rest.client.exception.TenantNotFoundException;
 import io.apicurio.registry.rest.v2.beans.ArtifactMetaData;
 import io.apicurio.registry.rest.v2.beans.Rule;
 import io.apicurio.registry.rest.v2.beans.SearchedArtifact;
@@ -63,7 +68,7 @@ import io.quarkus.test.junit.TestProfile;
  */
 @QuarkusTest
 @TestProfile(MultitenancyNoAuthTestProfile.class)
-public class MultitenancyNoAuthTest extends AbstractResourceTestBase {
+public class MultitenancyNoAuthTest extends AbstractRegistryTestBase {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MultitenancyNoAuthTest.class);
 
@@ -73,6 +78,34 @@ public class MultitenancyNoAuthTest extends AbstractResourceTestBase {
 
     @Inject
     MockTenantMetadataService tenantMetadataService;
+
+    @Test
+    public void testTenantErrorExceptions() throws Exception {
+
+        if (!storage.supportsMultiTenancy()) {
+            throw new TestAbortedException("Multitenancy not supported - aborting test");
+        }
+
+        String tenantId1 = UUID.randomUUID().toString();
+
+        String tenantId2 = UUID.randomUUID().toString();
+        tenantMetadataService.addToUnauthorizedList(tenantId2);
+
+        String tenant1BaseUrl = "http://localhost:8081/t/" + tenantId1;
+        String tenant2BaseUrl = "http://localhost:8081/t/" + tenantId2;
+
+        RegistryClient clientTenant1 = RegistryClientFactory.create(tenant1BaseUrl);
+        RegistryClient clientTenant2 = RegistryClientFactory.create(tenant2BaseUrl);
+
+        Assertions.assertThrows(TenantNotFoundException.class, () -> {
+            clientTenant1.listGlobalRules();
+        });
+
+        Assertions.assertThrows(ForbiddenException.class, () -> {
+            clientTenant2.listGlobalRules();
+        });
+
+    }
 
     @Test
     public void testMultitenantRegistry() throws Exception {
@@ -135,7 +168,7 @@ public class MultitenancyNoAuthTest extends AbstractResourceTestBase {
         client.createGlobalRule(ruleConfig);
 
         //test confluent api
-        String subject = generateArtifactId();
+        String subject = TestUtils.generateArtifactId();
         ParsedSchema schema1 = new AvroSchema("{\"type\":\"record\",\"name\":\"myrecord1\",\"fields\":[{\"name\":\"f1\",\"type\":\"string\"}]}");
         int id1 = cclient.register(subject, schema1);
         // Reset the client cache so that the next line actually does what we want.
@@ -156,7 +189,7 @@ public class MultitenancyNoAuthTest extends AbstractResourceTestBase {
             .baseUri(baseUrl)
             .when()
                 .queryParam("verify", "true")
-                .contentType(CT_JSON)
+                .contentType(AbstractResourceTestBase.CT_JSON)
                 .body("{\"name\":\"" + schemaName + "\",\"version\":\"" + versionName + "\",\"definition\":\"" + schemaDefinition + "\"}")
                 .post("/apis/ibmcompat/v1/schemas")
             .then()

@@ -1,12 +1,10 @@
 var ApicurioRegistryConfig = {
-    mode: "prod",
     artifacts: {
-        type: "rest",
         url: "http://localhost:8080/apis/registry"
     },
     ui: {
-        contextPath: null,
-        url: "http://localhost:8080/ui"
+        contextPath: "/",
+        navPrefixPath: "/"
     },
     auth: {
         type: "none"
