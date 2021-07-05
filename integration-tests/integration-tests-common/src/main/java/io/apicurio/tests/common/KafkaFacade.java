@@ -16,32 +16,22 @@
 package io.apicurio.tests.common;
 
 import org.apache.kafka.clients.admin.AdminClient;
-import org.apache.kafka.clients.admin.NewTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testcontainers.containers.output.OutputFrame.OutputType;
-
-import io.apicurio.registry.utils.tests.TestUtils;
-import io.apicurio.tests.common.utils.RegistryUtils;
 import io.strimzi.StrimziKafkaContainer;
-
-import java.util.Arrays;
-import java.util.Properties;
 
 /**
  * Facade class for simulate Kafka cluster
  */
-public class KafkaFacade implements RegistryTestProcess {
+public class KafkaFacade implements IKafkaFacade {
     static final Logger LOGGER = LoggerFactory.getLogger(KafkaFacade.class);
 
-    private StrimziKafkaContainer kafkaContainer;
-    private AdminClient client;
 
-    private static KafkaFacade instance;
+    private static IKafkaFacade instance;
 
-    public static KafkaFacade getInstance() {
+    public static IKafkaFacade getInstance() {
         if (instance == null) {
-            instance = new KafkaFacade();
+            instance = new KafkaFacadeContainer();
         }
         return instance;
     }
@@ -50,47 +40,12 @@ public class KafkaFacade implements RegistryTestProcess {
         //hidden constructor, singleton class
     }
 
-    public void createTopic(String topic, int partitions, int replicationFactor) {
-        adminClient().createTopics(Arrays.asList(new NewTopic(topic, partitions, (short) replicationFactor)));
-    }
-
+    @Override
     public String bootstrapServers() {
-        if (kafkaContainer != null) {
-            return kafkaContainer.getBootstrapServers();
-        }
-        return null;
+        return instance.bootstrapServers();
     }
 
-    public void startIfNeeded() {
-        if (!TestUtils.isExternalRegistry() && isKafkaBasedRegistry() && kafkaContainer != null) {
-            LOGGER.info("Skipping deployment of kafka, because it's already deployed as registry storage");
-        } else {
-            start();
-        }
-    }
-
-    public void stopIfPossible() throws Exception {
-        if (!TestUtils.isExternalRegistry() && isKafkaBasedRegistry()) {
-            LOGGER.info("Skipping stopping of kafka, because it's needed for registry storage");
-        } else {
-            if (kafkaContainer != null) {
-                close();
-            }
-        }
-    }
-
-    private boolean isKafkaBasedRegistry() {
-        return RegistryUtils.REGISTRY_STORAGE == RegistryStorageType.kafkasql;
-    }
-
-    public void start() {
-        LOGGER.info("Starting kafka container");
-        kafkaContainer = new StrimziKafkaContainer();
-        kafkaContainer.addEnv("KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR", "1");
-        kafkaContainer.addEnv("KAFKA_TRANSACTION_STATE_LOG_MIN_ISR", "1");
-        kafkaContainer.start();
-    }
-
+    @Override
     public StrimziKafkaContainer startNewKafka() {
         LOGGER.info("Starting new kafka container");
         StrimziKafkaContainer c = new StrimziKafkaContainer();
@@ -100,48 +55,68 @@ public class KafkaFacade implements RegistryTestProcess {
         return c;
     }
 
-    private AdminClient adminClient() {
-        if (client == null) {
-            Properties properties = new Properties();
-            properties.put("bootstrap.servers", bootstrapServers());
-            properties.put("connections.max.idle.ms", 10000);
-            properties.put("request.timeout.ms", 5000);
-            client = AdminClient.create(properties);
-        }
-        return client;
-    }
-
-    @Override
-    public String getName() {
-        return "kafka";
-    }
-
-    @Override
-    public void close() throws Exception {
-        LOGGER.info("Stopping kafka container");
-        if (client != null) {
-            client.close();
-            client = null;
-        }
-        if (kafkaContainer != null) {
-            kafkaContainer.stop();
-            kafkaContainer = null;
-        }
-    }
-
-    @Override
-    public String getStdOut() {
-        return kafkaContainer.getLogs(OutputType.STDOUT);
-    }
-
-    @Override
-    public String getStdErr() {
-        return kafkaContainer.getLogs(OutputType.STDERR);
-    }
-
+    /**
+     * @see io.apicurio.tests.common.RegistryTestProcess#isContainer()
+     */
     @Override
     public boolean isContainer() {
-        return true;
+        return instance.isContainer();
+    }
+
+    /**
+     * @see io.apicurio.tests.common.RegistryTestProcess#getName()
+     */
+    @Override
+    public String getName() {
+        return instance.getName();
+    }
+
+    /**
+     * @see io.apicurio.tests.common.RegistryTestProcess#getStdOut()
+     */
+    @Override
+    public String getStdOut() {
+        return instance.getStdOut();
+    }
+
+    /**
+     * @see io.apicurio.tests.common.RegistryTestProcess#getStdErr()
+     */
+    @Override
+    public String getStdErr() {
+        return instance.getStdErr();
+    }
+
+    /**
+     * @see java.lang.AutoCloseable#close()
+     */
+    @Override
+    public void close() throws Exception {
+        instance.close();
+    }
+
+    /**
+     * @see io.apicurio.tests.common.IKafkaFacade#isStarted()
+     */
+    @Override
+    public boolean isStarted() {
+        return instance.isStarted();
+    }
+
+    /**
+     * @see io.apicurio.tests.common.IKafkaFacade#start()
+     */
+    @Override
+    public void start() {
+        instance.start();
+    }
+
+    /**
+     * @see io.apicurio.tests.common.IKafkaFacade#adminClient()
+     */
+    @Override
+    public AdminClient adminClient() {
+        return instance.adminClient();
     }
 
 }

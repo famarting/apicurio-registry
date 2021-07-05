@@ -30,6 +30,9 @@
 
         <!--junit 4 version, required by testcontainers, should be aligned with the version from testcontainers -->
         <junit4.version>4.13.2</junit4.version>
+
+        <debezium.version>1.5.4.Final</debezium.version>
+
     </properties>
 
     <repositories>
@@ -139,7 +142,21 @@
             <groupId>io.zonky.test</groupId>
             <artifactId>embedded-postgres</artifactId>
             <version>${embedded-postgres.version}</version><!--$NO-MVN-MAN-VER$-->
-<!--             <scope>test</scope> -->
+        </dependency>
+
+<!--       In memory kafka -->
+        <dependency>
+            <groupId>io.debezium</groupId>
+            <artifactId>debezium-core</artifactId>
+            <version>${debezium.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.debezium</groupId>
+            <artifactId>debezium-core</artifactId>
+            <version>${debezium.version}</version>
+            <type>test-jar</type>
+            <scope>compile</scope>
         </dependency>
 
     </dependencies>

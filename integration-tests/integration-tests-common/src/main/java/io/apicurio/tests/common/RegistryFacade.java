@@ -503,7 +503,7 @@ public class RegistryFacade {
     private void setupKafkaStorage(Map<String, String> appEnv) throws TimeoutException, InterruptedException, ExecutionException {
 
         if (RegistryUtils.TEST_PROFILE.contains(Constants.MIGRATION)) {
-            KafkaFacade kafkaFacade = KafkaFacade.getInstance();
+            IKafkaFacade kafkaFacade = KafkaFacade.getInstance();
             var c = kafkaFacade.startNewKafka();
 
             appEnv.put("KAFKA_BOOTSTRAP_SERVERS", c.getBootstrapServers());
@@ -538,7 +538,7 @@ public class RegistryFacade {
             return;
         }
 
-        KafkaFacade kafkaFacade = KafkaFacade.getInstance();
+        IKafkaFacade kafkaFacade = KafkaFacade.getInstance();
         kafkaFacade.start();
 
         Properties properties = new Properties();

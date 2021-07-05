@@ -27,6 +27,7 @@ import io.apicurio.registry.types.ArtifactType;
 import io.apicurio.registry.utils.tests.TestUtils;
 import io.apicurio.tests.common.ApicurioRegistryBaseIT;
 import io.apicurio.tests.common.Constants;
+import io.apicurio.tests.common.IKafkaFacade;
 import io.apicurio.tests.common.KafkaFacade;
 import io.restassured.RestAssured;
 import io.restassured.parsing.Parser;
@@ -59,7 +60,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public abstract class BaseIT extends ApicurioRegistryBaseIT {
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(BaseIT.class);
-    protected static KafkaFacade kafkaCluster = KafkaFacade.getInstance();
+    protected static IKafkaFacade kafkaCluster = KafkaFacade.getInstance();
 
     protected final RegistryRestClient registryClient = createRegistryClient();
 
