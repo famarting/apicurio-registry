@@ -42,6 +42,7 @@ import io.apicurio.registry.utils.IoUtil;
 import io.apicurio.registry.utils.tests.TestUtils;
 import io.apicurio.tests.ConfluentBaseIT;
 import io.apicurio.tests.common.Constants;
+import io.apicurio.tests.common.IKafkaFacade;
 import io.apicurio.tests.common.KafkaFacade;
 import io.apicurio.tests.serdes.apicurio.AvroGenericRecordSchemaFactory;
 import io.apicurio.tests.serdes.apicurio.SerdesTester;
@@ -58,7 +59,7 @@ import io.confluent.kafka.serializers.subject.TopicRecordNameStrategy;
 @Tag(SERDES)
 public class BasicConfluentSerDesIT extends ConfluentBaseIT {
 
-    private KafkaFacade kafkaCluster = KafkaFacade.getInstance();
+    private IKafkaFacade kafkaCluster = KafkaFacade.getInstance();
 
     @BeforeAll
     void setupEnvironment() {

@@ -36,6 +36,7 @@ import io.apicurio.registry.utils.IoUtil;
 import io.apicurio.registry.utils.tests.TestUtils;
 import io.apicurio.tests.ApicurioV2BaseIT;
 import io.apicurio.tests.common.Constants;
+import io.apicurio.tests.common.IKafkaFacade;
 import io.apicurio.tests.common.KafkaFacade;
 import io.apicurio.tests.common.serdes.proto.TestCmmn;
 import io.apicurio.tests.protobuf.ProtobufTestMessage;
@@ -46,7 +47,7 @@ import io.apicurio.tests.protobuf.ProtobufTestMessage;
 @Tag(Constants.SERDES)
 public class ProtobufSerdeIT extends ApicurioV2BaseIT {
 
-    private KafkaFacade kafkaCluster = KafkaFacade.getInstance();
+    private IKafkaFacade kafkaCluster = KafkaFacade.getInstance();
 
     private Class<ProtobufKafkaSerializer> serializer = ProtobufKafkaSerializer.class;
     private Class<ProtobufKafkaDeserializer> deserializer = ProtobufKafkaDeserializer.class;

@@ -31,7 +31,8 @@ public class KafkaFacade implements IKafkaFacade {
 
     public static IKafkaFacade getInstance() {
         if (instance == null) {
-            instance = new KafkaFacadeContainer();
+            //using in memory kafka
+            instance = new KafkaFacadeInMemory();
         }
         return instance;
     }

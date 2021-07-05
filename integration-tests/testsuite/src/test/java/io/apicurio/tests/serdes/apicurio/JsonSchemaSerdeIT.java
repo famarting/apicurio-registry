@@ -35,6 +35,7 @@ import io.apicurio.registry.types.ArtifactType;
 import io.apicurio.registry.utils.tests.TestUtils;
 import io.apicurio.tests.ApicurioV2BaseIT;
 import io.apicurio.tests.common.Constants;
+import io.apicurio.tests.common.IKafkaFacade;
 import io.apicurio.tests.common.KafkaFacade;
 import io.apicurio.tests.common.serdes.json.InvalidMessage;
 import io.apicurio.tests.common.serdes.json.ValidMessage;
@@ -45,7 +46,7 @@ import io.apicurio.tests.common.serdes.json.ValidMessage;
 @Tag(Constants.SERDES)
 public class JsonSchemaSerdeIT extends ApicurioV2BaseIT {
 
-    private KafkaFacade kafkaCluster = KafkaFacade.getInstance();
+    private IKafkaFacade kafkaCluster = KafkaFacade.getInstance();
 
     private Class<JsonSchemaKafkaSerializer> serializer = JsonSchemaKafkaSerializer.class;
     private Class<JsonSchemaKafkaDeserializer> deserializer = JsonSchemaKafkaDeserializer.class;
