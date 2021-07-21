@@ -16,11 +16,17 @@
 
 package io.apicurio.registry.auth;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import org.keycloak.TokenVerifier;
 import org.keycloak.authorization.client.AuthzClient;
 import org.keycloak.authorization.client.Configuration;
+import org.keycloak.common.VerificationException;
+import org.keycloak.common.util.Time;
+import org.keycloak.representations.AccessToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -29,6 +35,10 @@ import org.keycloak.authorization.client.Configuration;
 public class KeycloakAuth extends ClientCredentialsAuth {
 
     private final AuthzClient keycloak;
+    private AccessToken accessTokenParsed;
+    private String accessToken;
+
+    private static final Logger log = LoggerFactory.getLogger(KeycloakAuth.class);
 
     public KeycloakAuth(String serverUrl, String realm, String clientId, String clientSecret) {
         super(serverUrl, realm, clientId, clientSecret);
@@ -43,7 +53,24 @@ public class KeycloakAuth extends ClientCredentialsAuth {
      */
     @Override
     public void apply(Map<String, String> requestHeaders) {
-        requestHeaders.put("Authorization", BEARER + this.keycloak.obtainAccessToken().getToken());
+        try {
+            if (isAccessTokenRequired()) {
+                this.accessToken = this.keycloak.obtainAccessToken().getToken();
+                this.accessTokenParsed = TokenVerifier.create(this.accessToken, AccessToken.class).getToken();
+            }
+            requestHeaders.put("Authorization", BEARER + accessToken);
+        } catch (VerificationException e) {
+            log.info("Error verifying access token: ", e);
+            throw new IllegalStateException(e);
+        }
+    }
+
+    private boolean isAccessTokenRequired() {
+        return null == accessTokenParsed || isTokenExpired();
+    }
+
+    private boolean isTokenExpired() {
+        return (accessTokenParsed.getExp() != null && accessTokenParsed.getExp() != 0L) && (long) Time.currentTime() > accessTokenParsed.getExp();
     }
 
     public static class Builder {
@@ -75,7 +102,7 @@ public class KeycloakAuth extends ClientCredentialsAuth {
             return this;
         }
 
-        public KeycloakAuth build(){
+        public KeycloakAuth build() {
             return new KeycloakAuth(this.serverUrl, this.realm, this.clientId, this.clientSecret);
         }
     }
