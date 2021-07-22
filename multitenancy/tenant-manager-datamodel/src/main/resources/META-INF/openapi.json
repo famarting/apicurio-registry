@@ -151,13 +151,14 @@
                         "schema": {
                             "type": "string"
                         },
-                        "in": "query"
+                        "in": "query",
+                        "required": false
                     },
                     {
                         "name": "offset",
                         "description": "The number of entries to skip before starting to collect the result set.  Defaults to 0.",
                         "schema": {
-                            "default": 0,
+                            "format": "int64",
                             "type": "integer"
                         },
                         "in": "query",
@@ -167,7 +168,7 @@
                         "name": "limit",
                         "description": "The number of entries to return.  Defaults to 20.",
                         "schema": {
-                            "default": 20,
+                            "format": "int64",
                             "type": "integer"
                         },
                         "in": "query",
@@ -179,7 +180,8 @@
                         "schema": {
                             "$ref": "#/components/schemas/SortOrder"
                         },
-                        "in": "query"
+                        "in": "query",
+                        "required": false
                     },
                     {
                         "name": "orderby",
@@ -187,7 +189,8 @@
                         "schema": {
                             "$ref": "#/components/schemas/SortBy"
                         },
-                        "in": "query"
+                        "in": "query",
+                        "required": false
                     }
                 ],
                 "responses": {
@@ -199,7 +202,7 @@
                                 }
                             }
                         },
-                        "description": "Successful response - returns an object containing a slice of `Tenant` entities."
+                        "description": "Successful response - returns an object containing a slice of `RegistryTenant` entities."
                     },
                     "500": {
                         "$ref": "#/components/responses/ServerError"
@@ -390,7 +393,8 @@
                         "type": "string"
                     },
                     "status": {
-                        "$ref": "#/components/schemas/TenantStatusValue"
+                        "$ref": "#/components/schemas/TenantStatusValue",
+                        "description": "Current status of the tenant"
                     }
                 },
                 "example": {
@@ -502,7 +506,8 @@
                         "type": "string"
                     },
                     "status": {
-                        "$ref": "#/components/schemas/TenantStatusValue"
+                        "$ref": "#/components/schemas/TenantStatusValue",
+                        "description": "The new status for the tenant, it won't be changed if not provided"
                     }
                 },
                 "example": {
@@ -549,7 +554,7 @@
                 }
             },
             "SortOrder": {
-                "description": "",
+                "description": "The order in which the list entries will be sorted",
                 "enum": [
                     "asc",
                     "desc"
@@ -557,7 +562,7 @@
                 "type": "string"
             },
             "SortBy": {
-                "description": "",
+                "description": "The name of the field that will be used for sorting",
                 "enum": [
                     "name",
                     "createdOn",
@@ -612,6 +617,71 @@
                     }
                 },
                 "description": "Common response for all operations that can fail with an unexpected server error."
+            }
+        },
+        "parameters": {
+            "offset": {
+                "examples": {
+                    "page": {
+                        "value": "0"
+                    }
+                },
+                "name": "page",
+                "description": "Page index",
+                "schema": {
+                    "minimum": 0,
+                    "type": "integer"
+                },
+                "in": "query",
+                "required": false
+            },
+            "limit": {
+                "examples": {
+                    "size": {
+                        "value": "100"
+                    }
+                },
+                "name": "size",
+                "description": "Number of items in each page",
+                "schema": {
+                    "maximum": 500,
+                    "minimum": 1,
+                    "type": "integer"
+                },
+                "in": "query",
+                "required": false
+            },
+            "orderBy": {
+                "style": "form",
+                "explode": true,
+                "examples": {
+                    "orderBy": {
+                        "value": "name asc"
+                    }
+                },
+                "name": "orderBy",
+                "description": "Specifies the order by criteria. The syntax of this parameter is\nsimilar to the syntax of the _order by_ clause of an SQL statement.\nEach query can be ordered by any of the kafkaRequests fields.\nFor example, in order to retrieve all kafkas ordered by their name:\n\n```sql\nname asc\n```\n\nOr in order to retrieve all kafkas ordered by their name _and_ created date:\n\n```sql\nname asc, created_at asc\n```\n\nIf the parameter isn't provided, or if the value is empty, then\nthe results will be ordered by name.",
+                "schema": {
+                    "type": "string"
+                },
+                "in": "query",
+                "required": false
+            },
+            "search": {
+                "style": "form",
+                "explode": true,
+                "examples": {
+                    "search": {
+                        "value": "name = my-registry and status = AVAILABLE"
+                    }
+                },
+                "name": "search",
+                "description": "Search criteria.\n\nThe syntax of this parameter is similar to the syntax of the _where_ clause of an\nSQL statement. Allowed fields in the search are: name, status. Allowed comparators are `=` or `LIKE`.\nAllowed joins are `AND` and `OR`, however there is a limit of max 10 joins in the search query.\n\nExamples:\n\nTo retrieve request with name equal `my-registry`  the value should be:\n\n```\nname = my-registry \n```\n\nTo retrieve kafka request with its name starting with `my`, the value should be:\n\n```\nname like my%25\n```\n\nIf the parameter isn't provided, or if the value is empty, then all the kafkas\nthat the user has permission to see will be returned.\n\nNote. If the query is invalid, an error will be returned\n",
+                "schema": {
+                    "type": "string"
+                },
+                "in": "query",
+                "required": false
             }
         }
     }
