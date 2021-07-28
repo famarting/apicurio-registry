@@ -47,11 +47,11 @@ import io.apicurio.multitenant.api.beans.TenantStatusValue;
 import io.apicurio.multitenant.api.datamodel.NewRegistryTenantRequest;
 import io.apicurio.multitenant.api.datamodel.RegistryTenant;
 import io.apicurio.multitenant.api.datamodel.UpdateRegistryTenantRequest;
+import org.keycloak.common.VerificationException;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.message.BasicNameValuePair;
-import org.keycloak.common.VerificationException;
 
 /**
  * @author Fabian Martinez
