@@ -17,7 +17,7 @@
         <groups></groups>
         <skipTests>true</skipTests>
         
-        <junit.version>5.7.2</junit.version>
+        <junit.version>5.8.0</junit.version>
         <junit.platform-launcher.version>1.7.2</junit.platform-launcher.version>
 
         <kafka.version>2.3.0</kafka.version>
@@ -122,6 +122,20 @@
         <dependency>
             <groupId>io.apicurio</groupId>
             <artifactId>apicurio-registry-client</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.squareup.wire</groupId>
+            <artifactId>wire-schema</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.wire</groupId>
+            <artifactId>wire-compiler</artifactId>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.jimfs/jimfs -->
+        <dependency>
+            <groupId>com.google.jimfs</groupId>
+            <artifactId>jimfs</artifactId>
         </dependency>
 
         <dependency>
