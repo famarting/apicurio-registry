@@ -31,7 +31,7 @@
         <!--junit 4 version, required by testcontainers, should be aligned with the version from testcontainers -->
         <junit4.version>4.13.2</junit4.version>
 
-        <debezium.version>1.6.2.Final</debezium.version>
+        <embedded.kafka>2.7.0</embedded.kafka>
     </properties>
 
     <repositories>
@@ -157,17 +157,14 @@
 
         <!-- used for embedded kafka -->
         <dependency>
-            <groupId>io.debezium</groupId>
-            <artifactId>debezium-core</artifactId>
-            <version>${debezium.version}</version>
-            <scope>compile</scope>
+            <groupId>io.github.embeddedkafka</groupId>
+            <artifactId>embedded-kafka_2.13</artifactId>
+            <version>${embedded.kafka}</version>
         </dependency>
         <dependency>
-            <groupId>io.debezium</groupId>
-            <artifactId>debezium-core</artifactId>
-            <version>${debezium.version}</version>
-            <type>test-jar</type>
-            <scope>compile</scope>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>

@@ -118,7 +118,7 @@ updates:
           - 1.36.0
       - dependency-name: org.scala-lang:scala-library
         versions:
-          - 2.12.10
+          - 2.13.5
       - dependency-name: org.infinispan:infinispan-client-rest
         versions:
           - 12.1.0.Dev01

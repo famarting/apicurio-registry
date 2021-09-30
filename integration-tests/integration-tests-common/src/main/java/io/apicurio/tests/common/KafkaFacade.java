@@ -23,7 +23,7 @@ import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.containers.output.OutputFrame.OutputType;
 
 import io.apicurio.registry.utils.tests.TestUtils;
-import io.apicurio.tests.common.kafka.EmbeddedKafka;
+import io.apicurio.tests.common.kafka.ApicurioEmbeddedKafka;
 import io.apicurio.tests.common.utils.RegistryUtils;
 
 import java.util.Arrays;
@@ -36,7 +36,7 @@ public class KafkaFacade implements RegistryTestProcess {
     static final Logger LOGGER = LoggerFactory.getLogger(KafkaFacade.class);
 
     private KafkaContainer kafkaContainer;
-    private EmbeddedKafka embeddedKafka;
+    private ApicurioEmbeddedKafka embeddedKafka;
     private AdminClient client;
 
     private static KafkaFacade instance;
@@ -101,7 +101,7 @@ public class KafkaFacade implements RegistryTestProcess {
 
         if (noDocker != null && noDocker.equals("true")) {
             LOGGER.info("Starting kafka embedded");
-            embeddedKafka = new EmbeddedKafka();
+            embeddedKafka = new ApicurioEmbeddedKafka();
             embeddedKafka.start();
         } else {
             LOGGER.info("Starting kafka container");
@@ -139,16 +139,18 @@ public class KafkaFacade implements RegistryTestProcess {
 
     @Override
     public void close() throws Exception {
-        LOGGER.info("Stopping kafka container");
+        LOGGER.info("Stopping kafka");
         if (client != null) {
             client.close();
             client = null;
         }
         if (kafkaContainer != null) {
+            LOGGER.info("Stopping kafka container");
             kafkaContainer.stop();
             kafkaContainer = null;
         }
         if (embeddedKafka != null) {
+            LOGGER.info("Stopping kafka embedded");
             embeddedKafka.stop();
             embeddedKafka = null;
         }
