@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import net.manub.embeddedkafka.EmbeddedK;
 import net.manub.embeddedkafka.EmbeddedKafka;
 import net.manub.embeddedkafka.EmbeddedKafkaConfigImpl;
+import scala.collection.immutable.HashMap;
 
 /**
  * @author Fabian Martinez
@@ -40,7 +41,7 @@ public class ApicurioEmbeddedKafka {
     }
 
     public void start() {
-        server = EmbeddedKafka.start(new EmbeddedKafkaConfigImpl(KAFKA_PORT, ZOOKEEPER_PORT, null, null, null));
+        server = EmbeddedKafka.start(new EmbeddedKafkaConfigImpl(KAFKA_PORT, ZOOKEEPER_PORT, new HashMap<String, String>(), new HashMap<String, String>(), new HashMap<String, String>()));
     }
 
     public void stop() {
