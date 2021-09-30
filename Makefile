@@ -213,6 +213,7 @@ pr-check:
 	CURRENT_ENV=mas mvn clean install -Pno-docker -Dskip.yarn -Pprod -Psql -Pmultitenancy -am -pl storage/sql,multitenancy/tenant-manager-api \
 		-Dmaven.javadoc.skip=true --no-transfer-progress -DtrimStackTrace=false
 	./scripts/clean-postgres.sh
+	mvn install -Pintegration-tests -pl integration-tests/integration-tests-common
 	CURRENT_ENV=mas NO_DOCKER=true mvn verify -Pintegration-tests -Pmultitenancy -Psql -am -pl integration-tests/testsuite \
 		-Dmaven.javadoc.skip=true --no-transfer-progress -DtrimStackTrace=false
 
