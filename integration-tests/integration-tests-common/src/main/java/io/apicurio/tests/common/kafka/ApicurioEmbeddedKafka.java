@@ -16,16 +16,12 @@
 
 package io.apicurio.tests.common.kafka;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
-import org.eclipse.jetty.io.RuntimeIOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import kafka.server.KafkaServer;
+import net.manub.embeddedkafka.EmbeddedK;
 import net.manub.embeddedkafka.EmbeddedKafka;
+import net.manub.embeddedkafka.EmbeddedKafkaConfigImpl;
 
 /**
  * @author Fabian Martinez
@@ -37,20 +33,14 @@ public class ApicurioEmbeddedKafka {
     protected static final int KAFKA_PORT = 9092;
     protected static final String DATA_DIR = "cluster";
 
-    private KafkaServer server;
+    private EmbeddedK server;
 
     public String bootstrapServers() {
         return "localhost:" + KAFKA_PORT;
     }
 
     public void start() {
-        try {
-            Path logFile = Files.createTempFile("kafka", ".log");
-            server = EmbeddedKafka.startKafka(KAFKA_PORT, ZOOKEEPER_PORT, new HashMap<>(), logFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeIOException(e);
-        }
+        server = EmbeddedKafka.start(new EmbeddedKafkaConfigImpl(KAFKA_PORT, ZOOKEEPER_PORT, null, null, null));
     }
 
     public void stop() {
