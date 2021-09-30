@@ -169,11 +169,6 @@
             <type>test-jar</type>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>org.scala-lang</groupId>
-            <artifactId>scala-library</artifactId>
-            <scope>test</scope>
-        </dependency>
 
     </dependencies>
 
