@@ -27,3 +27,8 @@ permissioned and permissionless blockchains.
     - permissionless: open to anyone to participate in the network
     - permissioned: network limited only to designated participants, may not involve digital assets or tokens
 data structures: hash chain, hash list, merkle tree
+
+### Conclusions
+- straw man blockchain
+- blockchain as a ledger to help with storage implementation, similar to kafkasql but blockchainsql :)
+- as something complementary to the sql mode, to add trust to sql storage, maybe using registry storage delegators we have
