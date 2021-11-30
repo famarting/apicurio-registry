@@ -7,6 +7,7 @@ UPDATE apicurio
 SET prop_value = 6
 WHERE prop_name = 'db_version';
 
+
 INSERT INTO acls (tenantId, principalId, role, principalName) VALUES ('9feb4e90-9dd9-4b71-a307-69ffb916391e', 'srvc-acct-3af3ee89-aab1-453c-af89-cedbfd25d8a4', 'DEVELOPER', '');
 
 INSERT INTO acls (tenantId, principalId, role, principalName) VALUES ('9feb4e90-9dd9-4b71-a307-69ffb916391e', 'srvc-acct-bdcd5065-8d3f-4ed2-b67a-7f7ab4ed986b', 'DEVELOPER', '');
@@ -1860,3 +1861,65 @@ INSERT INTO acls (tenantId, principalId, role, principalName) values ('15897632-
 INSERT INTO acls (tenantId, principalId, role, principalName) values ('2eb805a7-b7c8-4266-8677-3121e722a396','srvc-acct-ce728584-8f76-476a-996f-dc44594df39d','DEVELOPER','');
 
 INSERT INTO acls (tenantId, principalId, role, principalName) values ('9ee49243-165d-433c-85b1-a20fa3bc6c35','srvc-acct-97efd9b8-9191-45a6-a46a-0415e6688172','DEVELOPER','');
+
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('912ae7a0-abea-4adf-875c-3e71b1cad21b','srvc-acct-4f91f218-7df1-4a5c-99ff-2ada00c26e7e','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('912ae7a0-abea-4adf-875c-3e71b1cad21b','srvc-acct-8a9ee2e7-4007-4c1c-a9f4-ac060977e322','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('912ae7a0-abea-4adf-875c-3e71b1cad21b','srvc-acct-98bbe826-b2c7-4160-be53-154f0f836d72','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('912ae7a0-abea-4adf-875c-3e71b1cad21b','srvc-acct-f72e2a9c-a8ac-44a2-9aac-d2fcf45677cf','DEVELOPER','');
+
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('da8138eb-3276-454f-86db-3c5cb2b06358','srvc-acct-16f1fcf7-823e-43ff-846c-f7dfbc569b99','DEVELOPER','');
+
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-003e0f41-1515-4571-862b-d85e08ab8718','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-0caf46ec-e372-4b86-9f9d-07b4089298e9','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-12c2c960-3d30-4b9e-bb11-e64ba85d87a6','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-159ed9b6-9d69-4ce3-8fa2-68a72d4132a7','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-17601ff7-89f8-48c6-af99-e3e925cc433c','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-1d74c1b2-84ad-4b20-a783-cea6f6de544e','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-2a3caf60-d835-4eb3-a581-aa12315edaaf','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-2ae05460-7781-494a-9d0a-6c534fd5b68b','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-38ac1178-1ebb-47bb-8062-270a340420de','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-3dad62a0-0337-434f-b57a-1d0f48ec902f','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-40be6fd3-2f08-4359-a5f1-ba68106f72ea','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-50256f72-9a68-4a6c-ab16-372e685ddfa2','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-60cc1f76-08da-41ee-870d-adefcfc243f7','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-619cc5b3-1af6-48af-b0b3-3f20797cc6b6','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-6b3526f5-353e-46d7-bcb9-3c265ffbe293','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-75e7b996-7a79-4924-80b4-35e0dfb445a9','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-7d73ec82-a74d-43f5-b570-758d697336ae','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-7d7cbe29-70d0-4884-92d2-9cabc496b79e','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-84f7e46c-8f84-44a7-b190-e80e6f5e7ec8','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-9072f7f5-b02d-45fb-bd6c-536eaf074145','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-953201ba-52ce-4a24-a861-782bf68af72e','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-96242305-8bfc-4784-b6e9-ccb0c068c66b','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-9c5045b7-c2fc-4573-94c5-2487fb2ecc78','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-a32d014f-3c06-40c9-bd95-d0ba382140dd','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-a5de6120-acc9-42cd-a9ab-48d8b3226a38','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-a9316238-8f8f-426f-b504-0f45868d4273','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-b137b113-7a11-428a-b6de-ba3f67139b7b','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-c2fad538-76a4-4b39-83e1-978dc5457c86','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-c416de93-5d6e-4ac1-93be-1fc43bc92aaf','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-c8cb54da-661f-4606-ae01-e06ca5413ec1','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-ccc0a4f8-f738-465e-87d4-7965623f6066','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-ddf8bc95-670c-4cdd-b24f-fe9b49b83a02','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-df45a614-150d-4d06-94f2-42d62e2c0d94','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-e414b2e0-ba37-4992-a967-4941b9a94d35','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-e4807d23-2e47-4032-8288-4d70cfc2cf84','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-e6048a08-88eb-482a-83a3-35906e77caa5','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-e70a5b9d-b893-420c-8b3e-3b820dbbbba3','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-e9445f28-2dbe-4dab-8f84-839cb7e8b5f6','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-eab214be-a7b6-410e-8cc3-3f68ab0a4e6c','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-ec7f09db-6baf-4fbe-aa4e-33232ba1ba47','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-ee16d722-b908-49b1-8c0a-aa58e54d2e29','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-f017f0e6-5e07-464e-8357-693e7b19b0e5','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-f03d21c7-43fe-4bed-af6e-c8ef35d390ba','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-f1a73269-b25b-44e3-a1ab-dd10f3e29e6a','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-f50d1e8c-fcb8-44a2-99c2-0553c87cc56c','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2d6fd7a0-5bc6-4485-bb0b-de8b5f982a05','srvc-acct-f6e6c291-ca56-4dd1-8831-288e0ab48466','DEVELOPER','');
+
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('e5c8dde8-03c2-460d-9b40-5a050cda39cc','srvc-acct-bc4269a5-30e4-4c42-8976-f1706a5a4eb0','DEVELOPER','');
+
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2930e9e5-b6f3-4b30-9c78-09cfd408d15c','srvc-acct-0fa3da26-1b36-4898-962f-48367faec15a','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2930e9e5-b6f3-4b30-9c78-09cfd408d15c','srvc-acct-1cd87f02-83a2-4b68-832f-9cfe5808a9a2','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2930e9e5-b6f3-4b30-9c78-09cfd408d15c','srvc-acct-1e9f39a7-ca39-4362-8f42-4639733b9518','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2930e9e5-b6f3-4b30-9c78-09cfd408d15c','srvc-acct-3168496e-4246-4baa-a7c5-0523801c2685','DEVELOPER','');
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('2930e9e5-b6f3-4b30-9c78-09cfd408d15c','srvc-acct-d784af9b-0773-4acd-a6a6-2c2e7c9cb913','DEVELOPER','');
