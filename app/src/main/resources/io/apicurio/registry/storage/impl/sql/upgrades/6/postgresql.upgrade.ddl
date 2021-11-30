@@ -3,23 +3,14 @@
 -- Upgrades the DB schema from version 5 to version 6.
 -- *********************************************************************
 
-UPDATE apicurio
-SET prop_value = 6
-WHERE prop_name = 'db_version';
-
+UPDATE apicurio SET prop_value = 6 WHERE prop_name = 'db_version';
 
 INSERT INTO acls (tenantId, principalId, role, principalName) VALUES ('9feb4e90-9dd9-4b71-a307-69ffb916391e', 'srvc-acct-3af3ee89-aab1-453c-af89-cedbfd25d8a4', 'DEVELOPER', '');
-
 INSERT INTO acls (tenantId, principalId, role, principalName) VALUES ('9feb4e90-9dd9-4b71-a307-69ffb916391e', 'srvc-acct-bdcd5065-8d3f-4ed2-b67a-7f7ab4ed986b', 'DEVELOPER', '');
-
 INSERT INTO acls (tenantId, principalId, role, principalName) VALUES ('9feb4e90-9dd9-4b71-a307-69ffb916391e', 'srvc-acct-c9968686-8473-486f-8991-88d3504596e1', 'DEVELOPER', '');
-
 INSERT INTO acls (tenantId, principalId, role, principalName) VALUES ('2bd8a9a4-4157-4e38-9cef-528f5fdad70a', 'srvc-acct-0d1de4f7-629c-49e5-91c7-3c2a89650d68', 'DEVELOPER', '');
-
 INSERT INTO acls (tenantId, principalId, role, principalName) VALUES ('2bd8a9a4-4157-4e38-9cef-528f5fdad70a', 'srvc-acct-187f0a61-ccb9-423f-8cec-f848f89f55bc', 'DEVELOPER', '');
-
 INSERT INTO acls (tenantId, principalId, role, principalName) VALUES ('2bd8a9a4-4157-4e38-9cef-528f5fdad70a', 'srvc-acct-1bff6c27-326b-4e72-96f0-4378dbb9addf', 'DEVELOPER', '');
-
 INSERT INTO acls (tenantId, principalId, role, principalName) VALUES ('2bd8a9a4-4157-4e38-9cef-528f5fdad70a', 'srvc-acct-24a28cc2-b656-4972-a965-2d015ecd1b01', 'DEVELOPER', '');
 
 INSERT INTO acls (tenantId, principalId, role, principalName) VALUES ('2bd8a9a4-4157-4e38-9cef-528f5fdad70a', 'srvc-acct-2feac94d-c96e-41ec-b09d-20947733f79e', 'DEVELOPER', '');
