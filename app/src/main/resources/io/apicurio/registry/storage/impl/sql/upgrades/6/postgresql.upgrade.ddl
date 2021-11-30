@@ -1914,3 +1914,5 @@ INSERT INTO acls (tenantId, principalId, role, principalName) values ('2930e9e5-
 INSERT INTO acls (tenantId, principalId, role, principalName) values ('2930e9e5-b6f3-4b30-9c78-09cfd408d15c','srvc-acct-1e9f39a7-ca39-4362-8f42-4639733b9518','DEVELOPER','');
 INSERT INTO acls (tenantId, principalId, role, principalName) values ('2930e9e5-b6f3-4b30-9c78-09cfd408d15c','srvc-acct-3168496e-4246-4baa-a7c5-0523801c2685','DEVELOPER','');
 INSERT INTO acls (tenantId, principalId, role, principalName) values ('2930e9e5-b6f3-4b30-9c78-09cfd408d15c','srvc-acct-d784af9b-0773-4acd-a6a6-2c2e7c9cb913','DEVELOPER','');
+
+INSERT INTO acls (tenantId, principalId, role, principalName) values ('88a86411-f459-4305-ba1b-d9fd81e1044f','srvc-acct-f54ff87e-8e19-4463-9c10-893efdd23f76','DEVELOPER','');
