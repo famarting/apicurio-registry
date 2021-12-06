@@ -4,3 +4,5 @@
 -- *********************************************************************
 
 UPDATE apicurio SET prop_value = 6 WHERE prop_name = 'db_version';
+
+-- This upgrade script left intentionally blank.
